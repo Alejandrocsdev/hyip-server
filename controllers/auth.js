@@ -1,5 +1,7 @@
 // 引用 Models
 const { User } = require('../models')
+const { Captcha } = require('../models')
+const svgCaptcha = require('svg-captcha')
 // 引用異步錯誤處理中間件
 const { asyncError } = require('../middlewares')
 // 引用 成功回應 / 加密 / Cookie 模組
@@ -12,15 +14,21 @@ const Joi = require('joi')
 const CustomError = require('../errors/CustomError')
 // Body驗證條件(base)
 const schema = Joi.object({
-  password: Joi.string().min(8).max(16).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/).required()
+  password: Joi.string()
+    .min(8)
+    .max(16)
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/)
+    .required()
 })
 // Body驗證條件(extra)
 const signUpBody = { phone: Joi.string().pattern(/^09/).length(10).required() }
-const fbBody = { 
+const fbBody = {
   email: Joi.string().email(),
-  avatar: Joi.string().uri({ scheme: ['https'] }).required(),
+  avatar: Joi.string()
+    .uri({ scheme: ['https'] })
+    .required(),
   facebookId: Joi.string().required()
- }
+}
 
 class AuthController extends Validator {
   constructor() {
@@ -111,7 +119,13 @@ class AuthController extends Validator {
     // 生成唯一帳號
     const username = await encrypt.uniqueUsername(User)
 
-    const user = await User.create({ username, password: hashedPassword, facebookId, email, avatar })
+    const user = await User.create({
+      username,
+      password: hashedPassword,
+      facebookId,
+      email,
+      avatar
+    })
 
     const newUser = user.toJSON()
     delete newUser.password
@@ -136,6 +150,28 @@ class AuthController extends Validator {
     }
 
     return sucRes(res, 200, '登出成功')
+  })
+
+  captcha = asyncError(async (req, res, next) => {
+    const captcha = svgCaptcha.create()
+    req.session.captcha = captcha.text.toLowerCase()
+    console.log('Session ID:', req.sessionID)
+    console.log('captcha.text.toLowerCase():', captcha.text.toLowerCase())
+    res.type('svg')
+    res.status(200).send(captcha.data)
+  })
+
+  captchaVerify = asyncError(async (req, res, next) => {
+    const userCaptcha = req.body.captcha.toLowerCase()
+    const sessionCaptcha = req.session.captcha
+
+    console.log('userCaptcha:', req.body.captcha.toLowerCase())
+
+    if (userCaptcha === sessionCaptcha) {
+      res.send('Captcha verified')
+    } else {
+      res.send('Captcha failed')
+    }
   })
 }
 

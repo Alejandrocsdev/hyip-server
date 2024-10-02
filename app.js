@@ -17,6 +17,8 @@ const corsOptions = {
 }
 // 引用 Cookie-Parser 中間件
 const cookieParser = require('cookie-parser')
+// 引用 Express-Session 中間件
+const session = require('express-session')
 // 引用 Passport 初始化模組
 const { passportInit } = require('./config/passport')
 // 引用路由模組
@@ -31,6 +33,14 @@ app.use(express.json())
 app.use(cors(corsOptions))
 // 中間件: 解析 Cookie
 app.use(cookieParser())
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true, maxAge: 5 * 60 * 1000 }
+  })
+)
 // 初始化 Passport
 app.use(passportInit)
 // 掛載路由中間件
