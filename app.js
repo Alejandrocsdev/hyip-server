@@ -11,10 +11,7 @@ const cors = require('cors')
 // 引用前端網域
 const { frontUrl } = require('./utils')
 // 設定 CORS 的選項，允許來自特定來源的請求，並且允許攜帶憑證
-const corsOptions = {
-  origin: frontUrl,
-  credentials: true
-}
+const corsOptions = { origin: frontUrl, credentials: true }
 // 引用 Cookie-Parser 中間件
 const cookieParser = require('cookie-parser')
 // 引用 Express-Session 中間件
@@ -45,7 +42,7 @@ app.use(
       httpOnly: true,
       path: '/',
       sameSite: isProduction ? 'none' : 'strict',
-      secure: isProduction,
+      secure: false,
       domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
     }
   })
