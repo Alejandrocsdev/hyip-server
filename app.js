@@ -31,23 +31,28 @@ app.use(cors(corsOptions))
 // 中間件: 解析 Cookie
 app.use(cookieParser())
 
+app.set('trust proxy', 1)
+
 // const isProduction = process.env.NODE_ENV === 'production'
 
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//       maxAge: 5 * 60 * 1000,
-//       httpOnly: true,
-//       path: '/',
-//       sameSite: isProduction ? 'none' : 'strict',
-//       secure: isProduction,
-//       domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
-//     }
-//   })
-// )
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    maxAge: 5 * 60 * 1000,
+    domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost',
+    httpOnly: true,
+    cookie: {
+      // maxAge: 5 * 60 * 1000,
+      // httpOnly: true,
+      path: '/',
+      sameSite: isProduction ? 'none' : 'strict',
+      secure: isProduction,
+      // domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
+    }
+  })
+)
 
 // 初始化 Passport
 app.use(passportInit)
