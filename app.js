@@ -31,7 +31,13 @@ app.use(cors(corsOptions))
 // 中間件: 解析 Cookie
 app.use(cookieParser())
 
-app.set('trust proxy', 1)
+app.set('trust proxy', true)
+
+app.use((req, res, next) => {
+  console.log('X-Forwarded-Proto:', req.headers['x-forwarded-proto'])
+  console.log('X-Forwarded-For:', req.headers['x-forwarded-for'])
+  next()
+})
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -40,18 +46,18 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    // maxAge: 5 * 60 * 1000, 
+    // maxAge: 5 * 60 * 1000,
     // null
     // domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost',
-    // httpOnly: true, 
+    // httpOnly: true,
     // true
     cookie: {
       maxAge: 5 * 60 * 1000,
       httpOnly: true,
-      path: '/', 
+      path: '/',
       // '/'
       sameSite: isProduction ? 'none' : 'strict',
-      secure: isProduction, 
+      secure: isProduction,
       // false
       domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
     }
