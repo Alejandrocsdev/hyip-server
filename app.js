@@ -15,7 +15,7 @@ const corsOptions = { origin: frontUrl, credentials: true }
 // 引用 Cookie-Parser 中間件
 const cookieParser = require('cookie-parser')
 // 引用 Express-Session 中間件
-const session = require('express-session')
+// const session = require('express-session')
 // 引用 Passport 初始化模組
 const { passportInit } = require('./config/passport')
 // 引用路由模組
@@ -31,23 +31,23 @@ app.use(cors(corsOptions))
 // 中間件: 解析 Cookie
 app.use(cookieParser())
 
-const isProduction = process.env.NODE_ENV === 'production'
+// const isProduction = process.env.NODE_ENV === 'production'
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 5 * 60 * 1000,
-      httpOnly: true,
-      path: '/',
-      sameSite: isProduction ? 'none' : 'strict',
-      secure: isProduction,
-      domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
-    }
-  })
-)
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//       maxAge: 5 * 60 * 1000,
+//       httpOnly: true,
+//       path: '/',
+//       sameSite: isProduction ? 'none' : 'strict',
+//       secure: isProduction,
+//       domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
+//     }
+//   })
+// )
 
 // 初始化 Passport
 app.use(passportInit)
