@@ -154,20 +154,22 @@ class AuthController extends Validator {
 
   captcha = asyncError(async (req, res, next) => {
     const captcha = svgCaptcha.create()
-    req.session.captcha = captcha.text.toLowerCase()
 
-    // const isProduction = process.env.NODE_ENV === 'production'
-    // res.cookie('captcha', captcha.text.toLowerCase(), {
-    //   maxAge: 5 * 60 * 1000,
-    //   httpOnly: true,
-    //   path: '/',
-    //   sameSite: isProduction ? 'none' : 'strict',
-    //   secure: isProduction,
-    //   domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
+    // Create a math CAPTCHA with color and size options
+    // const captcha = svgCaptcha.createMathExpr({
+    //   color: true, // Enable colors
+    //   noise: 2, // Add some noise lines
+    //   fontSize: 60, // Set font size
+    //   width: 100, // Set width
+    //   height: 50 // Set height
     // })
+
+    req.session.captcha = captcha.text.toLowerCase()
+    // req.session.captcha = captcha.text
 
     console.log('Session ID:', req.sessionID)
     console.log('captcha.text.toLowerCase():', captcha.text.toLowerCase())
+    // console.log('Math CAPTCHA Solution:', captcha.text)
 
     res.type('svg')
     res.status(200).send(captcha.data)
@@ -176,10 +178,10 @@ class AuthController extends Validator {
   captchaVerify = asyncError(async (req, res, next) => {
     const userCaptcha = req.body.captcha.toLowerCase()
     const sessionCaptcha = req.session.captcha
-    // const sessionCaptcha = req.cookies.captcha
 
     console.log('userCaptcha:', req.body.captcha.toLowerCase())
-    console.log('sessionCaptcha:', req.cookies.captcha)
+    console.log('sessionCaptcha:', req.session.captcha)
+    // console.log('Session Captcha (Solution):', req.session.captcha)
 
     if (userCaptcha === sessionCaptcha) {
       res.send('Captcha verified')
