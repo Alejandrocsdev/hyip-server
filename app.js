@@ -38,7 +38,13 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true, maxAge: 5 * 60 * 1000 }
+    cookie: {
+      httpOnly: true,
+      path: '/',
+      sameSite: 'none',
+      secure: true,
+      domain: process.env.COOKIE_DOMAIN
+    }
   })
 )
 // 初始化 Passport
