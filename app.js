@@ -40,16 +40,20 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    maxAge: 5 * 60 * 1000,
-    domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost',
-    httpOnly: true,
+    // maxAge: 5 * 60 * 1000, 
+    // null
+    // domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost',
+    // httpOnly: true, 
+    // true
     cookie: {
-      // maxAge: 5 * 60 * 1000,
-      // httpOnly: true,
-      path: '/',
+      maxAge: 5 * 60 * 1000,
+      httpOnly: true,
+      path: '/', 
+      // '/'
       sameSite: isProduction ? 'none' : 'strict',
-      secure: isProduction,
-      // domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
+      secure: isProduction, 
+      // false
+      domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
     }
   })
 )
