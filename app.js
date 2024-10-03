@@ -31,7 +31,8 @@ app.use(cors(corsOptions))
 // 中間件: 解析 Cookie
 app.use(cookieParser())
 
-app.set('trust proxy', true)
+// app.set('trust proxy', true)
+app.set('trust proxy', 1)
 
 app.use((req, res, next) => {
   console.log('X-Forwarded-Proto:', req.headers['x-forwarded-proto'])
