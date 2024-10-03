@@ -31,7 +31,7 @@ app.use(cors(corsOptions))
 // 中間件: 解析 Cookie
 app.use(cookieParser())
 
-// app.set('trust proxy', 1)
+app.set('trust proxy', 1)
 
 const isProduction = process.env.NODE_ENV === 'production'
 
