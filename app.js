@@ -15,7 +15,7 @@ const corsOptions = { origin: frontUrl, credentials: true }
 // 引用 Cookie-Parser 中間件
 const cookieParser = require('cookie-parser')
 // 引用 Express-Session 中間件
-// const session = require('express-session')
+const session = require('express-session')
 // 引用 Passport 初始化模組
 const { passportInit } = require('./config/passport')
 // 引用路由模組
@@ -33,7 +33,7 @@ app.use(cookieParser())
 
 app.set('trust proxy', 1)
 
-// const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.NODE_ENV === 'production'
 
 app.use(
   session({
