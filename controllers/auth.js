@@ -166,6 +166,7 @@ class AuthController extends Validator {
     const sessionCaptcha = req.session.captcha
 
     console.log('userCaptcha:', req.body.captcha.toLowerCase())
+    console.log('sessionCaptcha:', req.session.captcha)
 
     if (userCaptcha === sessionCaptcha) {
       res.send('Captcha verified')
