@@ -41,8 +41,8 @@ app.use(
       maxAge: 5 * 60 * 1000,
       httpOnly: true,
       path: '/',
-      sameSite: 'strict',
-      secure: false,
+      sameSite: isProduction ? 'none' : 'strict',
+      secure: isProduction,
       domain: isProduction ? process.env.COOKIE_DOMAIN : 'localhost'
     }
   })
